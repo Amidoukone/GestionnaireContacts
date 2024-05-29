@@ -21,6 +21,18 @@ public class ContactServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
+
+        if ("add".equals(action)) {
+            addContact(req, resp);
+        } else if ("update".equals(action)) {
+            updateContact(req, resp);
+        } else if ("delete".equals(action)) {
+            deleteContact(req, resp);
+        }
+    }
+
+    private void addContact(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String nom = req.getParameter("nom");
         String numeroTelephone = req.getParameter("numeroTelephone");
         String ville = req.getParameter("ville");
@@ -28,6 +40,34 @@ public class ContactServlet extends HttpServlet {
 
         Contact contact = new Contact(nom, numeroTelephone, ville, profession);
         contacts.add(contact);
+
+        resp.sendRedirect("contacts");
+    }
+
+    private void updateContact(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        String nom = req.getParameter("nom");
+        String numeroTelephone = req.getParameter("numeroTelephone");
+        String ville = req.getParameter("ville");
+        String profession = req.getParameter("profession");
+
+        for (Contact contact : contacts) {
+            if (contact.getId() == id) {
+                contact.setNom(nom);
+                contact.setNumeroTelephone(numeroTelephone);
+                contact.setVille(ville);
+                contact.setProfession(profession);
+                break;
+            }
+        }
+
+        resp.sendRedirect("contacts");
+    }
+
+    private void deleteContact(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+
+        contacts.removeIf(contact -> contact.getId() == id);
 
         resp.sendRedirect("contacts");
     }

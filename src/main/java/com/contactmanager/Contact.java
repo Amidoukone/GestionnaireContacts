@@ -1,19 +1,25 @@
 package com.contactmanager;
 
 public class Contact {
+    private static int idCounter = 0;
+    private int id;
     private String nom;
     private String numeroTelephone;
     private String ville;
     private String profession;
 
     public Contact(String nom, String numeroTelephone, String ville, String profession) {
+        this.id = ++idCounter; // Génère un ID unique pour chaque contact
         this.nom = nom;
         this.numeroTelephone = numeroTelephone;
         this.ville = ville;
         this.profession = profession;
     }
 
-    // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
     public String getNom() {
         return nom;
     }
